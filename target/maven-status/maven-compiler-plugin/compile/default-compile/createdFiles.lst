@@ -1,0 +1,4 @@
+com/example/demo/DemoApplication.class
+com/example/demo/model/TestResult.class
+com/example/demo/controller/TestController$TestFailure.class
+com/example/demo/controller/TestController.class
