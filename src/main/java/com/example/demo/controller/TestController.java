@@ -1,12 +1,13 @@
 package com.example.demo.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -15,6 +16,12 @@ import java.util.regex.Pattern;
 @RestController
 public class TestController {
     private static final Logger logger = LoggerFactory.getLogger(TestController.class);
+    
+    @Value("${maven.path:mvn}")
+    private String mavenPath;
+    
+    @Value("${test.project.path:/app/backend-test-code}")
+    private String testProjectPath;
     
     private static class TestFailure {
         String testName;
@@ -32,8 +39,10 @@ public class TestController {
         }
     }
     
-    @GetMapping(value = "/start-test", produces = MediaType.TEXT_HTML_VALUE)
-    public String startTest() {
+    @GetMapping("/")
+    public String runTest() {
+        logger.info("Running tests directly from root URL");
+        
         StringBuilder output = new StringBuilder();
         output.append("<!DOCTYPE html><html><head>");
         output.append("<style>");
@@ -70,8 +79,8 @@ public class TestController {
         
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
-            processBuilder.command("/home/anshumann/Desktop/apache-maven-3.9.9/bin/mvn", "clean", "install");
-            processBuilder.directory(new java.io.File("/home/anshumann/Desktop/Remotewebdriver/MyAutomationProject"));
+            processBuilder.command(mavenPath, "clean", "install");
+            processBuilder.directory(new java.io.File(testProjectPath));
             processBuilder.redirectErrorStream(true);
             
             Process process = processBuilder.start();
