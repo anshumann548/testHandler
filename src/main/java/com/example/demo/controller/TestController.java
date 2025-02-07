@@ -20,7 +20,7 @@ public class TestController {
     @Value("${maven.path:mvn}")
     private String mavenPath;
     
-    @Value("${test.project.path:/app/backend-test-code}")
+    @Value("${test.project.path:/app/test-project}")
     private String testProjectPath;
     
     private static class TestFailure {
